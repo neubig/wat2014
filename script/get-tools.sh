@@ -4,6 +4,14 @@ set -e
 CORES=`nproc`
 WD=`pwd`
 
+
+# Install Nile. There are lots of dependencies, so this is annoying.
+if [[ ! -e $WD/tools/nile ]]; then
+
+    wget -P $WD/tools/download https://nile.googlecode.com/files/nile-v1.20.tar.gz
+
+fi
+
 # Install desired packages
 PACKAGES="git libtool libboost-all-dev"
 # echo "Currently installing packages '$PACKAGES' if they don't already exist"
@@ -21,7 +29,7 @@ if [[ ! -e $WD/tools/travatar/src/bin/travatar ]]; then
     make -j $CORES 
 fi
 
-################### Egret Parser ###########################################
+################### Language Independent Tools ############################
 
 # Install Egret
 if [[ ! -e $WD/tools/egret ]]; then
@@ -34,7 +42,7 @@ fi
 
 ################### English Processing Tools ###############################
 
-if [[ ! -e stanford-parser-full-2014-08-27 ]]; then
+if [[ ! -e $WD/tools/stanford-parser-full-2014-08-27 ]]; then
 
     wget -P $WD/tools/download http://nlp.stanford.edu/software/stanford-parser-full-2014-08-27.zip
     cd $WD/tools
@@ -56,8 +64,7 @@ if [[ ! -e $WD/tools/bin/kytea ]]; then
 fi
 
 # Install Eda
-
-if [[ ! -e $WD/tools/bin/eda ]]; then
+if [[ ! -e $WD/tools/eda-0.3.1/eda ]]; then
     mkdir -p $WD/tools/download
     wget -P $WD/tools/download http://plata.ar.media.kyoto-u.ac.jp/tool/EDA/downloads/eda-0.3.1.tar.gz
     cd $WD/tools
@@ -67,3 +74,9 @@ if [[ ! -e $WD/tools/bin/eda ]]; then
 fi
 
 ################### Chinese Processing Tools ###############################
+
+
+
+################### Finish #################################################
+
+echo "Finished getting tools!"
