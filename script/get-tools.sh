@@ -4,11 +4,7 @@ set -e
 CORES=`nproc`
 WD=`pwd`
 
-
 # Install desired packages
-PACKAGES="git python libtool libboost-all-dev cython python-gflags libboost-mpi-python-dev openmpi-bin"
-echo "Currently installing packages '$PACKAGES' if they don't already exist"
-sudo apt-get install $PACKAGES
 
 TD=$WD/tools
 
@@ -27,6 +23,11 @@ if [[ ! -e $TD/nile ]]; then
     cd $TD/nile/pyglog
     python setup.py install --user
 
+fi
+
+if [[ ! -e $TD/nile/model ]]; then
+    mkdir -p $TD/nile/model
+    wget -P $TD/nile/model http://www.phontron.com/travatar/download/nile-en-ja.model
 fi
 
 # Install travatar
@@ -55,6 +56,8 @@ if [[ ! -e $TD/stanford-parser-full-2014-08-27 ]]; then
     wget -P $TD/download http://nlp.stanford.edu/software/stanford-parser-full-2014-08-27.zip
     cd $TD
     unzip download/stanford-parser-full-2014-08-27.zip
+    ln -s $TD/stanford-parser-full-* $TD/stanford-parser
+    ln -s $TD/stanford-parser/stanford-parser-*-models.jar $TD/stanford-parser/stanford-parser-models.jar
 
 fi
 
@@ -72,21 +75,29 @@ if [[ ! -e $TD/bin/kytea ]]; then
 fi
 
 # Install Eda
-if [[ ! -e $TD/eda-0.3.1/eda ]]; then
+if [[ ! -e $TD/eda/eda ]]; then
     mkdir -p $TD/download
     wget -P $TD/download http://plata.ar.media.kyoto-u.ac.jp/tool/EDA/downloads/eda-0.3.1.tar.gz
     cd $TD
     tar -xzf download/eda-0.3.1.tar.gz
     cd eda-0.3.1
     make -j $CORES
+    ln -s $TD/eda-0.3.1 $TD/eda
+fi
+
+if [[ ! -e $TD/eda/model.etm ]]; then
+    wget -P $TD/eda http://plata.ar.media.kyoto-u.ac.jp/tool/EDA/downloads/bccwj-20140727.etm.gz
+    gunzip $TD/eda/bccwj-20140727.etm.gz
+    ln -s $TD/eda/bccwj-20140727.etm $TD/eda/model.etm
 fi
 
 ################### Chinese Processing Tools ###############################
 
-if [[ ! -e $TD/stanford-segmenter-2014-08-27 ]]; then
+if [[ ! -e $TD/stanford-segmenter ]]; then
     wget -P $TD/download http://nlp.stanford.edu/software/stanford-segmenter-2014-08-27.zip
-    sc $TD
+    cd $TD
     unzip download/stanford-segmenter-2014-08-27.zip
+    ln -s $TD/stanford-segmenter-2014-08-27 $TD/stanford-segmenter
 fi
 
 ################### Finish #################################################

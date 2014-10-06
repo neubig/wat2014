@@ -4,4 +4,4 @@
 script/get-tools.sh
 
 # Get the data from the ASPEC directory
-script/run-get-data.sh
+script/get-data.sh
