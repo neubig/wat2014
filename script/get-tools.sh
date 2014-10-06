@@ -5,47 +5,56 @@ CORES=`nproc`
 WD=`pwd`
 
 
-# Install Nile. There are lots of dependencies, so this is annoying.
-if [[ ! -e $WD/tools/nile ]]; then
-
-    wget -P $WD/tools/download https://nile.googlecode.com/files/nile-v1.20.tar.gz
-
-fi
-
 # Install desired packages
-PACKAGES="git libtool libboost-all-dev"
+PACKAGES="git python libtool libboost-all-dev cython python-gflags libboost-mpi-python-dev openmpi-bin"
 # echo "Currently installing packages '$PACKAGES' if they don't already exist"
 # sudo apt-get install $PACKAGES
 
-mkdir -p $WD/tools
+TD=$WD/tools
+
+mkdir -p $TD/download
+
+################### Language Independent Tools ############################
+
+# Install Nile and its dependencies
+if [[ ! -e $TD/nile ]]; then
+ 
+    git clone https://github.com/neubig/nile.git $TD/nile
+    # Install svector
+    cd $TD/nile/svector
+    python setup.py install --user
+    # Install pyglog
+    cd $TD/nile/pyglog
+    python setup.py install --user
+
+fi
+exit
 
 # Install travatar
-if [[ ! -e $WD/tools/travatar/src/bin/travatar ]]; then
-    git clone https://github.com/neubig/travatar.git $WD/tools/travatar
+if [[ ! -e $TD/travatar/src/bin/travatar ]]; then
+    git clone https://github.com/neubig/travatar.git $TD/travatar
     
-    cd $WD/tools/travatar
+    cd $TD/travatar
     autoreconf -i
     ./configure
     make -j $CORES 
 fi
 
-################### Language Independent Tools ############################
-
 # Install Egret
-if [[ ! -e $WD/tools/egret ]]; then
+if [[ ! -e $TD/egret ]]; then
 
-    git clone https://github.com/neubig/egret.git $WD/tools/egret 
-    cd $WD/tools/egret
+    git clone https://github.com/neubig/egret.git $TD/egret 
+    cd $TD/egret
     make -j $CORES 
 
 fi
 
 ################### English Processing Tools ###############################
 
-if [[ ! -e $WD/tools/stanford-parser-full-2014-08-27 ]]; then
+if [[ ! -e $TD/stanford-parser-full-2014-08-27 ]]; then
 
-    wget -P $WD/tools/download http://nlp.stanford.edu/software/stanford-parser-full-2014-08-27.zip
-    cd $WD/tools
+    wget -P $TD/download http://nlp.stanford.edu/software/stanford-parser-full-2014-08-27.zip
+    cd $TD
     unzip download/stanford-parser-full-2014-08-27.zip
 
 fi
@@ -53,21 +62,21 @@ fi
 ################### Japanese Processing Tools ##############################
 
 # Install KyTea
-if [[ ! -e $WD/tools/bin/kytea ]]; then
-    git clone https://github.com/neubig/kytea.git $WD/tools/kytea
+if [[ ! -e $TD/bin/kytea ]]; then
+    git clone https://github.com/neubig/kytea.git $TD/kytea
     
-    cd $WD/tools/kytea
+    cd $TD/kytea
     autoreconf -i
-    ./configure --prefix=$WD/tools
+    ./configure --prefix=$TD
     make -j $CORES 
     make install
 fi
 
 # Install Eda
-if [[ ! -e $WD/tools/eda-0.3.1/eda ]]; then
-    mkdir -p $WD/tools/download
-    wget -P $WD/tools/download http://plata.ar.media.kyoto-u.ac.jp/tool/EDA/downloads/eda-0.3.1.tar.gz
-    cd $WD/tools
+if [[ ! -e $TD/eda-0.3.1/eda ]]; then
+    mkdir -p $TD/download
+    wget -P $TD/download http://plata.ar.media.kyoto-u.ac.jp/tool/EDA/downloads/eda-0.3.1.tar.gz
+    cd $TD
     tar -xzf download/eda-0.3.1.tar.gz
     cd eda-0.3.1
     make -j $CORES
