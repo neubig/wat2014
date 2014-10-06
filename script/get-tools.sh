@@ -7,8 +7,8 @@ WD=`pwd`
 
 # Install desired packages
 PACKAGES="git python libtool libboost-all-dev cython python-gflags libboost-mpi-python-dev openmpi-bin"
-# echo "Currently installing packages '$PACKAGES' if they don't already exist"
-# sudo apt-get install $PACKAGES
+echo "Currently installing packages '$PACKAGES' if they don't already exist"
+sudo apt-get install $PACKAGES
 
 TD=$WD/tools
 
@@ -28,7 +28,6 @@ if [[ ! -e $TD/nile ]]; then
     python setup.py install --user
 
 fi
-exit
 
 # Install travatar
 if [[ ! -e $TD/travatar/src/bin/travatar ]]; then
@@ -84,7 +83,11 @@ fi
 
 ################### Chinese Processing Tools ###############################
 
-
+if [[ ! -e $TD/stanford-segmenter-2014-08-27 ]]; then
+    wget -P $TD/download http://nlp.stanford.edu/software/stanford-segmenter-2014-08-27.zip
+    sc $TD
+    unzip download/stanford-segmenter-2014-08-27.zip
+fi
 
 ################### Finish #################################################
 
