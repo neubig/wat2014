@@ -49,19 +49,16 @@ if [[ ! -e $TD/egret ]]; then
 
 fi
 
-################### English Processing Tools ###############################
+# Install Egret
+if [[ ! -e $TD/Ckylark ]]; then
 
-if [[ ! -e $TD/stanford-parser-full-2014-08-27 ]]; then
-
-    wget -P $TD/download http://nlp.stanford.edu/software/stanford-parser-full-2014-08-27.zip
-    cd $TD
-    unzip download/stanford-parser-full-2014-08-27.zip
-    ln -s $TD/stanford-parser-full-* $TD/stanford-parser
-    ln -s $TD/stanford-parser/stanford-parser-*-models.jar $TD/stanford-parser/stanford-parser-models.jar
+    git clone https://github.com/odashi/Ckylark.git $TD/Ckylark 
+    cd $TD/Ckylark
+    autoreconf -i
+    ./configure
+    make -j $CORES 
 
 fi
-
-################### Japanese Processing Tools ##############################
 
 # Install KyTea
 if [[ ! -e $TD/bin/kytea ]]; then
@@ -72,32 +69,6 @@ if [[ ! -e $TD/bin/kytea ]]; then
     ./configure --prefix=$TD
     make -j $CORES 
     make install
-fi
-
-# Install Eda
-if [[ ! -e $TD/eda/eda ]]; then
-    mkdir -p $TD/download
-    wget -P $TD/download http://plata.ar.media.kyoto-u.ac.jp/tool/EDA/downloads/eda-0.3.1.tar.gz
-    cd $TD
-    tar -xzf download/eda-0.3.1.tar.gz
-    cd eda-0.3.1
-    make -j $CORES
-    ln -s $TD/eda-0.3.1 $TD/eda
-fi
-
-if [[ ! -e $TD/eda/model.etm ]]; then
-    wget -P $TD/eda http://plata.ar.media.kyoto-u.ac.jp/tool/EDA/downloads/bccwj-20140727.etm.gz
-    gunzip $TD/eda/bccwj-20140727.etm.gz
-    ln -s $TD/eda/bccwj-20140727.etm $TD/eda/model.etm
-fi
-
-################### Chinese Processing Tools ###############################
-
-if [[ ! -e $TD/stanford-segmenter ]]; then
-    wget -P $TD/download http://nlp.stanford.edu/software/stanford-segmenter-2014-08-27.zip
-    cd $TD
-    unzip download/stanford-segmenter-2014-08-27.zip
-    ln -s $TD/stanford-segmenter-2014-08-27 $TD/stanford-segmenter
 fi
 
 ################### Finish #################################################

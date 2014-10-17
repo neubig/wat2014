@@ -16,10 +16,10 @@ TRG3LET=eng
 ST=$SRC-$TRG
 mkdir -p $ST/preproc log
 
-$TRAVDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -truecase-trg -split-words-trg "$SPLIT_TRG" -egret-src-model $EDIR/jpn_grammar -egret-trg-model $EDIR/${TRG3LET}_grammar -nile-gizatype union -nile-model $NILEDIR/model/nile-$TRG-$SRC.model -nile-order trgsrc -align -threads $CORES -clean-len 80 -src $SRC -trg $TRG $ST/data/train.$SRC $ST/data/train.$TRG $WD/$ST/preproc/train &> log/preproc-$ST-`hostname`.log
+$TRAVDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -truecase-trg -split-words-trg "$SPLIT_TRG" -egret-src-model $EDIR/jpn_grammar -egret-trg-model $EDIR/${TRG3LET}_grammar -nile-gizatype union -nile-model $NILEDIR/model/nile-$TRG-$SRC.model -nile-order trgsrc -align -threads 10 -clean-len 80 -src $SRC -trg $TRG $ST/data/train.$SRC $ST/data/train.$TRG $WD/$ST/preproc/train &> log/preproc-$ST-`hostname`.log
 
 for f in dev devtest test; do
-    $TRAVDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -truecase-trg -truecase-trg-model $ST/preproc/train/truecaser/en.truecaser -split-words-trg "$SPLIT_TRG" -egret-forest-opt "-nbest4threshold=500" -forest-src -forest-trg -egret-src-model $EDIR/jpn_grammar -egret-trg-model $EDIR/${TRG3LET}_grammar -threads $CORES -src $SRC -trg $TRG $ST/data/$f.$SRC $ST/data/$f.$TRG $WD/$ST/preproc/$f &> log/preproc-$ST-$f-`hostname`.log
+    $TRAVDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -truecase-trg -truecase-trg-model $ST/preproc/train/truecaser/en.truecaser -split-words-trg "$SPLIT_TRG" -egret-forest-opt "-nbest4threshold=500" -forest-src -forest-trg -egret-src-model $EDIR/jpn_grammar -egret-trg-model $EDIR/${TRG3LET}_grammar -threads 10 -src $SRC -trg $TRG $ST/data/$f.$SRC $ST/data/$f.$TRG $WD/$ST/preproc/$f &> log/preproc-$ST-$f-`hostname`.log
 done
 
 # ********* Preprocess ja-zh data *********
@@ -29,10 +29,10 @@ TRG3LET=chn
 ST=$SRC-$TRG
 mkdir -p $ST/preproc log
 
-$TRAVDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -egret-src-model $EDIR/jpn_grammar -egret-trg-model $EDIR/${TRG3LET}_grammar -align -threads $CORES -clean-len 80 -src $SRC -trg $TRG $ST/data/train.$SRC $ST/data/train.$TRG $WD/$ST/preproc/train &> log/preproc-$ST-`hostname`.log
+$TRAVDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -egret-src-model $EDIR/jpn_grammar -egret-trg-model $EDIR/${TRG3LET}_grammar -align -threads 10 -clean-len 80 -src $SRC -trg $TRG $ST/data/train.$SRC $ST/data/train.$TRG $WD/$ST/preproc/train &> log/preproc-$ST-`hostname`.log
 
 for f in dev devtest test; do
-    $TRAVDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -egret-forest-opt "-nbest4threshold=500" -forest-src -forest-trg -egret-src-model $EDIR/jpn_grammar -egret-trg-model $EDIR/${TRG3LET}_grammar -threads $CORES -src $SRC -trg $TRG $ST/data/$f.$SRC $ST/data/$f.$TRG $WD/$ST/preproc/$f &> log/preproc-$ST-$f-`hostname`.log
+    $TRAVDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -egret-forest-opt "-nbest4threshold=500" -forest-src -forest-trg -egret-src-model $EDIR/jpn_grammar -egret-trg-model $EDIR/${TRG3LET}_grammar -threads 10 -src $SRC -trg $TRG $ST/data/$f.$SRC $ST/data/$f.$TRG $WD/$ST/preproc/$f &> log/preproc-$ST-$f-`hostname`.log
 done
 
  
