@@ -12,6 +12,17 @@ mkdir -p $TD/download
 
 ################### Language Independent Tools ############################
 
+# Install GIZA++
+
+if [[ ! -e $TD/giza-pp ]]; then
+    wget -P $TD https://giza-pp.googlecode.com/files/giza-pp-v1.0.7.tar.gz
+    cd $TD
+    tar -xzf $TD/giza-pp-v1.0.7.tar.gz
+    cd $TD/giza-pp
+    make -j $CORES
+    cp GIZA++-v2/GIZA++ GIZA++-v2/*.out mkcls-v2/mkcls .
+fi
+
 # Install Nile and its dependencies
 if [[ ! -e $TD/nile ]]; then
  
@@ -31,7 +42,7 @@ if [[ ! -e $TD/nile/model ]]; then
 fi
 
 # Install travatar
-if [[ ! -e $TD/travatar/src/bin/travatar ]]; then
+if [[ ! -e $TD/travatar ]]; then
     git clone https://github.com/neubig/travatar.git $TD/travatar
     
     cd $TD/travatar
@@ -57,6 +68,15 @@ if [[ ! -e $TD/Ckylark ]]; then
     autoreconf -i
     ./configure
     make -j $CORES 
+    
+    # Get chinese models (temporary)
+    cd $TD/Ckylark/model
+    wget http://www.phontron.com/download/ckylark-ctb.tar.gz
+    tar -xzf ckylark-ctb.tar.gz
+    rm ckylark-ctb.tar.gz
+
+    # Unzip models
+    gunzip $TD/Ckylark/model/*.gz
 
 fi
 
@@ -69,6 +89,11 @@ if [[ ! -e $TD/bin/kytea ]]; then
     ./configure --prefix=$TD
     make -j $CORES 
     make install
+
+    # Install the chinese model
+    wget -P $TD/kytea/data http://www.phontron.com/kytea/download/model/ctb-0.4.0-5.mod.gz
+    gunzip $TD/kytea/data/ctb-0.4.0-5.mod.gz
+
 fi
 
 ################### Finish #################################################

@@ -1,8 +1,19 @@
 #!/bin/bash
 
-TRAVDIR=/home/is/neubig/work/travatar
-SRC=ja
-TRG=en
+if [[ $# != 5 ]]; then
+    echo "Usage: $0 SRC SRC_TYPE TRG TRG_TYPE ALIGN"
+    exit
+fi
+
+WD=`pwd`
+TRAVDIR=$WD/tools/travatar
+
+SRC=$1
+SRCTYPE=$2
+TRG=$3
+TRGTYPE=$4
+ALIGNTYPE=$5
+
 if [[ $SRC == "ja" ]]; then 
     F=$SRC; E=$TRG
 else 
@@ -13,28 +24,27 @@ WD=`pwd`
 NT=2
 TERM=10
 SRCTRG=${SRC}${TRG}
-ALIGNTYPE=nile
-LMORDER=5
+LMORDER=6
 COMPOSE=5
 SMOOTH=kn
 ATTACH=top
 BINARIZE=rightrp
-FEAT=dic
+FEAT=std
 
-SRC_TREE=treein
-SRC_WORD=in
-TRG_TREE=out
-TRG_WORD=out
+SRC_TREE=tree$SRCTYPE
+SRC_WORD=$SRCTYPE
+TRG_TREE=$TRGTYPE
+TRG_WORD=$TRGTYPE
 
 TRG_FORMAT=word
 
 if [[ "x$FEAT" == "xisx" ]]; then 
     TRG_FORMAT=penn
-    TRG_TREE=treeout
+    TRG_TREE=tree$TRGTYPE
     SCORE_OPTIONS=-trg_syntax
 elif [[ "x$FEAT" == "xsyn" ]]; then 
     TRG_FORMAT=penn
-    TRG_TREE=treeout
+    TRG_TREE=tree$TRGTYPE
     SCORE_OPTIONS="-trg-syntax -src-label -trg-label -src-trg-label"
 fi
 
@@ -42,7 +52,8 @@ ID=$SRCTRG-$ALIGNTYPE-lm$LMORDER-nt$NT-t$TERM-c$COMPOSE-s$SMOOTH-f$FEAT-st$SRC_T
 echo $ID
 [[ -e travatar-model ]] || mkdir travatar-model
 if [[ ! -e $WD/travatar-model/$ID ]]; then
-    nohup $TRAVDIR/script/train/train-travatar.pl -score_options "$SCORE_OPTIONS" -trg_format $TRG_FORMAT -attach $ATTACH -binarize $BINARIZE -smooth $SMOOTH -compose $COMPOSE -nonterm_len $NT -term_len $TERM -work_dir $WD/travatar-model/$ID -lm_file $WD/lm/interp/$LMORDER/$SRC-$TRG.blm -src_file $WD/$FE/preproc/train/$SRC_TREE/$SRC -src_words $WD/$FE/preproc/train/$SRC_WORD/$SRC -trg_file $WD/$FE/preproc/train/$TRG_TREE/$TRG -trg_words $WD/$FE/preproc/train/$TRG_WORD/$TRG -align_file $WD/$FE/preproc/train/$ALIGNTYPE/$SRCTRG -travatar_dir $TRAVDIR -threads 2 &> log/train-$ID.log
+    echo "nohup $TRAVDIR/script/train/train-travatar.pl -score_options \"$SCORE_OPTIONS\" -trg_format $TRG_FORMAT -attach $ATTACH -binarize $BINARIZE -smooth $SMOOTH -compose $COMPOSE -nonterm_len $NT -term_len $TERM -work_dir $WD/travatar-model/$ID -lm_file $WD/lm/model/$LMORDER/$TRG.blm -src_file $WD/$FE/preproc/train/$SRC_TREE/$SRC -src_words $WD/$FE/preproc/train/$SRC_WORD/$SRC -trg_file $WD/$FE/preproc/train/$TRG_TREE/$TRG -trg_words $WD/$FE/preproc/train/$TRG_WORD/$TRG -align_file $WD/$FE/preproc/train/$ALIGNTYPE/$SRCTRG -travatar_dir $TRAVDIR -threads 2 &> log/train-$ID.log"
+    nohup $TRAVDIR/script/train/train-travatar.pl -score_options "$SCORE_OPTIONS" -trg_format $TRG_FORMAT -attach $ATTACH -binarize $BINARIZE -smooth $SMOOTH -compose $COMPOSE -nonterm_len $NT -term_len $TERM -work_dir $WD/travatar-model/$ID -lm_file $WD/lm/model/$LMORDER/$TRG.blm -src_file $WD/$FE/preproc/train/$SRC_TREE/$SRC -src_words $WD/$FE/preproc/train/$SRC_WORD/$SRC -trg_file $WD/$FE/preproc/train/$TRG_TREE/$TRG -trg_words $WD/$FE/preproc/train/$TRG_WORD/$TRG -align_file $WD/$FE/preproc/train/$ALIGNTYPE/$SRCTRG -travatar_dir $TRAVDIR -threads 2 &> log/train-$ID.log
 fi
 
 if [[ -e $WD/travatar-model/$ID/model/travatar.ini ]]; then
@@ -53,3 +64,4 @@ if [[ -e $WD/travatar-model/$ID/model/travatar.ini ]]; then
         fi
     done
 fi
+wait

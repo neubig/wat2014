@@ -18,3 +18,7 @@ Then, you can run the entire process of downloading all the tools necessary, pre
 Note two things:
 1) This has a 99% chance of breaking in your environment. When it does, contact neubig at is.naist.jp for help. Do not hesitate, do not worry. I would like to help you get it working.
 2) This will take forever! Maybe a week on a single machine with 20 cores. If you want to make it work faster, look at the individual scripts. There are many parts that can be run in parallel on multiple machines.
+
+
+It should also be noted that there are a couple things in the WAT paper that are not implemented here because they alone require other scripts and don't seem to be too important:
+* Interpolation of zh-ja and en-ja language models. The current script just concatenates the data. If you want to do this, check run-preproc.sh.
