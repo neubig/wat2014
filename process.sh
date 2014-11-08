@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Download and install the tools
 script/get-tools.sh
