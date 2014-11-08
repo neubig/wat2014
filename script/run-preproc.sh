@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if [[ $# != 1 ]]; then
+    echo "Usage: $0 en/zh"
+    exit 1;
+fi
+
 WD=`pwd`
 EDIR=$WD/tools/egret
 KDIR=$WD/tools/kytea
@@ -29,19 +34,19 @@ done
 
 exit
 
-# # ********* Preprocess ja-zh data *********
-# echo "Preprocessing ja-zh training data"
-# TRG=zh
-# TRG3LET=chn
-# ST=$SRC-$TRG
-# mkdir -p $ST/preproc log
-# 
-# echo "$TDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -egret-src-model $EDIR/jpn_grammar -kytea-trg-model $KDIR/data/ctb-0.4.0-5.mod -ckylark-trg-model $CDIR/model/ctb -egret-trg-model $EDIR/${TRG3LET}_grammar -align -threads $CORES -clean-len 80 -src $SRC -trg $TRG $ST/data/train.$SRC $ST/data/train.$TRG $WD/$ST/preproc/train &> log/preproc-$ST-`hostname`.log"
-# $TDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -egret-src-model $EDIR/jpn_grammar -kytea-trg-model $KDIR/data/ctb-0.4.0-5.mod -ckylark-trg-model $CDIR/model/ctb -egret-trg-model $EDIR/${TRG3LET}_grammar -align -threads $CORES -clean-len 80 -src $SRC -trg $TRG $ST/data/train.$SRC $ST/data/train.$TRG $WD/$ST/preproc/train &> log/preproc-$ST-`hostname`.log
-# 
-# for f in dev devtest test; do
-#     $TDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -egret-forest-opt "-nbest4threshold=500" -forest-src -forest-trg -egret-src-model $EDIR/jpn_grammar -kytea-trg-model $KDIR/data/ctb-0.4.0-5.mod -ckylark-trg-model $CDIR/model/ctb -egret-trg-model $EDIR/${TRG3LET}_grammar -threads $CORES -src $SRC -trg $TRG $ST/data/$f.$SRC $ST/data/$f.$TRG $WD/$ST/preproc/$f &> log/preproc-$ST-$f-`hostname`.log
-# done
+# ********* Preprocess ja-zh data *********
+echo "Preprocessing ja-zh training data"
+TRG=zh
+TRG3LET=chn
+ST=$SRC-$TRG
+mkdir -p $ST/preproc log
+
+echo "$TDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -egret-src-model $EDIR/jpn_grammar -kytea-trg-model $KDIR/data/ctb-0.4.0-5.mod -ckylark-trg-model $CDIR/model/ctb -egret-trg-model $EDIR/${TRG3LET}_grammar -align -threads $CORES -clean-len 80 -src $SRC -trg $TRG $ST/data/train.$SRC $ST/data/train.$TRG $WD/$ST/preproc/train &> log/preproc-$ST-`hostname`.log"
+$TDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -egret-src-model $EDIR/jpn_grammar -kytea-trg-model $KDIR/data/ctb-0.4.0-5.mod -ckylark-trg-model $CDIR/model/ctb -egret-trg-model $EDIR/${TRG3LET}_grammar -align -threads $CORES -clean-len 80 -src $SRC -trg $TRG $ST/data/train.$SRC $ST/data/train.$TRG $WD/$ST/preproc/train &> log/preproc-$ST-`hostname`.log
+
+for f in dev devtest test; do
+    $TDIR/script/preprocess/preprocess.pl -program-dir $WD/tools -egret-forest-opt "-nbest4threshold=500" -forest-src -forest-trg -egret-src-model $EDIR/jpn_grammar -kytea-trg-model $KDIR/data/ctb-0.4.0-5.mod -ckylark-trg-model $CDIR/model/ctb -egret-trg-model $EDIR/${TRG3LET}_grammar -threads $CORES -src $SRC -trg $TRG $ST/data/$f.$SRC $ST/data/$f.$TRG $WD/$ST/preproc/$f &> log/preproc-$ST-$f-`hostname`.log
+done
 
  
 # ********* LM preprocessing *********

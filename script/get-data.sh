@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
 
+if [[ $# != 2 ]]; then
+    echo "Usage: $0 NUM_TM NUM_LM"
+    exit 1
+fi
+
+NUM_TM=$1
+NUM_LM=$2
+
 # The location of the aspec data
 ASPEC_DIR=$HOME/corpus/ASPEC
 if [[ ! -e $ASPEC_DIR/data ]]; then
@@ -19,12 +27,12 @@ done
 
 f=train
 echo "Getting ja-en $f"
-cat $ASPEC_DIR/data/ASPEC-JE/$f/*.txt | head -n 5000 | script/split-aspec.pl ja-en/data/$f.{id,ja,en} entrain 0.05
+cat $ASPEC_DIR/data/ASPEC-JE/$f/*.txt | head -n $NUM_TM | script/split-aspec.pl ja-en/data/$f.{id,ja,en} entrain 0.05
 echo "Getting ja-zh $f"
-cat $ASPEC_DIR/data/ASPEC-JC/$f/*.txt | head -n 5000  | script/split-aspec.pl ja-zh/data/$f.{id,ja,zh} zh
+cat $ASPEC_DIR/data/ASPEC-JC/$f/*.txt | head -n $NUM_TM  | script/split-aspec.pl ja-zh/data/$f.{id,ja,zh} zh
 
 # Get the LM data
 mkdir -p lm/raw
 f=train
-cat $ASPEC_DIR/data/ASPEC-JE/$f/*.txt | head -n 5000  | script/split-aspec.pl lm/raw/aspec-ja-en-$f.{id,ja,en} entrain
-cat  $ASPEC_DIR/data/ASPEC-JC/$f/*.txt | head -n 5000  | script/split-aspec.pl lm/raw/aspec-ja-zh-$f.{id,ja,zh} zh
+cat $ASPEC_DIR/data/ASPEC-JE/$f/*.txt | head -n $NUM_LM  | script/split-aspec.pl lm/raw/aspec-ja-en-$f.{id,ja,en} entrain
+cat  $ASPEC_DIR/data/ASPEC-JC/$f/*.txt | head -n $NUM_LM  | script/split-aspec.pl lm/raw/aspec-ja-zh-$f.{id,ja,zh} zh

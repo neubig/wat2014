@@ -2,7 +2,7 @@
 
 if [[ $# != 5 ]]; then
     echo "Usage: $0 SRC SRC_TYPE TRG TRG_TYPE ALIGN"
-    exit
+    exit 1
 fi
 
 WD=`pwd`
