@@ -14,9 +14,9 @@ CORES=`nproc`
 # ********* LM preprocessing *********
 if [[ ! -e lm/data ]]; then
     mkdir -p lm/data
-    cat lm/raw/*.ja | sed 's/¡¢/¡¤/g;  s/¡Ê¡Ë//g; s/ //g' | ~/work/util-scripts/han2zen.pl --nospace | kytea -notags -wsconst D > lm/data/all.ja
+    cat lm/raw/*.ja | sed 's/ã€/ï¼Œ/g;  s/ï¼ˆï¼‰//g; s/ //g' | ~/work/util-scripts/han2zen.pl --nospace | $KDIR/src/bin/kytea -model $KDIR/data/model.bin -notags -wsconst D > lm/data/all.ja
     cat lm/raw/*.en | $TDIR/src/bin/tokenizer | sed "s/[     ]+/ /g; s/^ +//g; s/ +$//g" | ~/work/travatar/src/bin/tree-converter -input_format word -output_format word -split '(-|\\/)' | $TDIR/script/recaser/truecase.pl --model ja-en/preproc/train/truecaser/en.truecaser > lm/data/all.en
-    cat lm/raw/*.zh | $KDIR/src/bin/kytea -model $KDIR/data/ctb-0.4.0-5.mod | sed 's/¡Ê *¡Ë *//g' | ~/work/util-scripts/han2zen.pl --nospace 2> /dev/null > lm/data/all.zh
+    cat lm/raw/*.zh | $KDIR/src/bin/kytea -model $KDIR/data/ctb-0.4.0-5.mod | sed 's/ï¼ˆ *ï¼‰ *//g' | ~/work/util-scripts/han2zen.pl --nospace 2> /dev/null > lm/data/all.zh
 fi
 
 # ********* LM training *********

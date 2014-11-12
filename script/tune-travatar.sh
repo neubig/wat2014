@@ -25,7 +25,11 @@ if [[ $SRC == "ja" ]]; then
 else
     F=$TRG; E=$SRC
 fi
-TXTDIR=out
+if [[ $TRG == "en" ]]; then
+    TXTDIR=true
+else
+    TXTDIR=low
+fi
 MODTYPE=$input
 if [[ $input == fortrue* ]]; then MODTYPE=treetrue; fi
 if [[ $input == forlow* ]]; then MODTYPE=treelow; fi
