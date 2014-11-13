@@ -35,8 +35,8 @@ if [[ $input == fortrue* ]]; then MODTYPE=treetrue; fi
 if [[ $input == forlow* ]]; then MODTYPE=treelow; fi
 FE="$F-$E"
 # Iterate over the models
-for f in travatar-model/${SRC}${TRG}*lm*st$MODTYPE*; do
-for evalt in bleu interp; do
+for f in travatar-model/${SRC}${TRG}*st$MODTYPE*; do
+for evalt in bleu; do
 for PL in 2000; do
 for CL in 050; do
     ACTEVAL=$evalt
