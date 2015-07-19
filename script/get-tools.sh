@@ -53,7 +53,7 @@ fi
 
 # Install Egret
 if [[ ! -e $TD/egret ]]; then
-
+    
     git clone https://github.com/neubig/egret.git $TD/egret 
     cd $TD/egret
     make -j $CORES 
@@ -70,6 +70,7 @@ if [[ ! -e $TD/Ckylark ]]; then
     make -j $CORES 
     
     # Get chinese models (temporary)
+    mkdir -p $TD/Ckylark/model
     cd $TD/Ckylark/model
     wget http://www.phontron.com/download/ckylark-ctb.tar.gz
     tar -xzf ckylark-ctb.tar.gz
@@ -89,6 +90,7 @@ if [[ ! -e $TD/bin/kytea ]]; then
     git clone https://github.com/neubig/kytea.git $TD/kytea
     
     cd $TD/kytea
+    gunzip data/model.bin.gz # Needs to unzip the models file before autoreconf
     autoreconf -i
     ./configure --prefix=$TD
     make -j $CORES 
@@ -101,8 +103,8 @@ if [[ ! -e $TD/bin/kytea ]]; then
 fi
 
 # Install util-scirpts in ~/work/
-if [[ ! -e $WD/work ]]; then
-    git clone https://github.com/neubig/util-scripts.git $WD/work
+if [[ ! -e $TD/util-scripts ]]; then
+    git clone https://github.com/neubig/util-scripts.git $TD/util-scripts
 fi
     
 
