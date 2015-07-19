@@ -60,7 +60,7 @@ if [[ ! -e $TD/egret ]]; then
 
 fi
 
-# Install Egret
+# Install Ckylark
 if [[ ! -e $TD/Ckylark ]]; then
 
     git clone https://github.com/odashi/Ckylark.git $TD/Ckylark 
@@ -77,7 +77,11 @@ if [[ ! -e $TD/Ckylark ]]; then
 
     # Unzip models
     gunzip $TD/Ckylark/model/*.gz
-
+    
+    # Create symbolic link to lowercase $TD/cylark directory 
+    # (somehow travatar's preprocess.pl uses it when doing one-best parse,
+    #  when doing script/run-preproc.sh)
+    ln -s $TD/ckylark $TD/Ckylark
 fi
 
 # Install KyTea
