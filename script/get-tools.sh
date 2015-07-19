@@ -98,6 +98,12 @@ if [[ ! -e $TD/bin/kytea ]]; then
 
 fi
 
+# Install util-scirpts in ~/work/
+if [[ ! -e $WD/work ]]; then
+    git clone https://github.com/neubig/util-scripts.git $WD/work
+fi
+    
+
 ################### Finish #################################################
 
 echo "Finished getting tools!"
