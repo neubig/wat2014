@@ -99,7 +99,7 @@ if [[ ! -e $TD/bin/kytea ]]; then
 fi
 
 # Install util-scirpts in ~/work/
-if [[ ! -e $WD/work ]]; then
+if [[ ! -e $TD/util-scripts ]]; then
     git clone https://github.com/neubig/util-scripts.git $TD/util-scripts
 fi
     
